@@ -392,7 +392,7 @@ def run():
         type=str, action='append', default=[], dest='merged_urls')
     parser.add_argument('--give-author', metavar='DONATION_PERCENTAGE',
         help='donate this percentage of work towards the development of p2pool (default: 1.0)',
-        type=float, action='store', default=1.0, dest='donation_percentage')
+        type=float, action='store', default=0, dest='donation_percentage')
     parser.add_argument('--iocp',
         help='use Windows IOCP API in order to avoid errors due to large number of sockets being open',
         action='store_true', default=False, dest='iocp')
@@ -421,7 +421,7 @@ def run():
         type=int, action='store', default=6, dest='p2pool_outgoing_conns')
     parser.add_argument('--disable-advertise',
         help='''don't advertise local IP address as being available for incoming connections. useful for running a dark node, along with multiple -n ADDR's and --outgoing-conns 0''',
-        action='store_false', default=True, dest='advertise_ip')
+        action='store_false', default=False, dest='advertise_ip')
     
     worker_group = parser.add_argument_group('worker interface')
     worker_group.add_argument('-w', '--worker-port', metavar='PORT or ADDR:PORT',
@@ -429,7 +429,7 @@ def run():
         type=str, action='store', default=None, dest='worker_endpoint')
     worker_group.add_argument('-f', '--fee', metavar='FEE_PERCENTAGE',
         help='''charge workers mining to their own bitcoin address (by setting their miner's username to a bitcoin address) this percentage fee to mine on your p2pool instance. Amount displayed at http://127.0.0.1:WORKER_PORT/fee (default: 0)''',
-        type=float, action='store', default=0, dest='worker_fee')
+        type=float, action='store', default=0.5, dest='worker_fee')
     worker_group.add_argument('--miner-share-rate', metavar='SHARES_PER_MINUTE',
         help='number of psuedoshares per minute for each miner',
         type=float, action='store', default=None, dest='miner_share_rate')

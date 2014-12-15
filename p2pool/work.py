@@ -164,6 +164,7 @@ class WorkerBridge(worker_interface.WorkerBridge):
         
         if random.uniform(0, 100) < self.worker_fee:
             pubkey_hash = self.my_pubkey_hash
+            print 'Work been done as fee'
         else:
             try:
                 pubkey_hash = bitcoin_data.address_to_pubkey_hash(user, self.node.net.PARENT)
@@ -352,12 +353,20 @@ class WorkerBridge(worker_interface.WorkerBridge):
         lp_count = self.new_work_event.times
         merkle_link = bitcoin_data.calculate_merkle_link([None] + other_transaction_hashes, 0)
         
-        print 'New work for worker! Difficulty: %.06f Share difficulty: %.06f Total block value: %.6f %s including %i transactions' % (
-            bitcoin_data.target_to_difficulty(target),
-            bitcoin_data.target_to_difficulty(share_info['bits'].target),
-            self.current_work.value['subsidy']*1e-8, self.node.net.PARENT.SYMBOL,
-            len(self.current_work.value['transactions']),
-        )
+        if desired_pseudoshare_target is None:
+            print 'New work for worker! Difficulty: %.06f Share difficulty: %.06f Total block value: %.6f %s including %i transactions' % (
+                bitcoin_data.target_to_difficulty(target),
+                bitcoin_data.target_to_difficulty(share_info['bits'].target),
+                self.current_work.value['subsidy']*1e-8, self.node.net.PARENT.SYMBOL,
+                len(self.current_work.value['transactions']),
+            )
+        else:
+            print 'Difficulty set by user: %.06f Share difficulty: %.06f Total block value: %.6f %s including %i transactions' % (
+                bitcoin_data.target_to_difficulty(target),
+                bitcoin_data.target_to_difficulty(share_info['bits'].target),
+                self.current_work.value['subsidy']*1e-8, self.node.net.PARENT.SYMBOL,
+                len(self.current_work.value['transactions']),
+            )
 
         #need this for stats
         self.last_work_shares.value[bitcoin_data.pubkey_hash_to_address(pubkey_hash, self.node.net.PARENT)]=share_info['bits']
